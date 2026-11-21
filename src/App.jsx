@@ -1,45 +1,21 @@
-import React, { useState } from 'react';
-import Navbar from './components/Navbar';
-import HeroSection from './components/HeroSection';
-import ProjectsSection from './components/ProjectsSection';
-import AboutSection from './components/AboutSection';
-import ContactSection from './components/ContactSection';
+import React from 'react';
+import Header from './components/Header';
+import PortfolioSection from './components/PortfolioSection';
 import Footer from './components/Footer';
-import FloatingActions from './components/FloatingActions';
 
 export default function App() {
-  const [activeCategory, setActiveCategory] = useState('all');
-
-  const handleNavigate = (navId, categoryFilter) => {
-    if (categoryFilter) {
-      setActiveCategory(categoryFilter);
-    } else if (navId === 'websites') {
-      setActiveCategory('websites');
-    } else if (navId === 'mobile-apps') {
-      setActiveCategory('mobile');
-    } else if (navId === 'saas') {
-      setActiveCategory('saas');
-    } else if (navId === 'work') {
-      setActiveCategory('all');
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col antialiased selection:bg-primary-fixed selection:text-primary">
-      <Navbar />
-      <main className="flex-1 w-full">
-        <HeroSection />
-        <ProjectsSection
-          selectedCategory={activeCategory}
-          onCategoryChange={(cat) => {
-            setActiveCategory(cat);
-          }}
-        />
-        <AboutSection />
-        <ContactSection />
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col antialiased selection:bg-blue-100 selection:text-primary">
+      {/* 1. Clean, Modern, Professional Header with Company Logo & Name (No separate page links) */}
+      <Header />
+
+      {/* 2. Main Centered Single-Page Scrolling Portfolio Section with Dynamic Filter Tabs */}
+      <main className="flex-1 w-full pt-14 sm:pt-16">
+        <PortfolioSection />
       </main>
-      <Footer onNavigate={handleNavigate} />
-      <FloatingActions />
+
+      {/* 3. Compact Clean Single-Page Footer */}
+      <Footer />
     </div>
   );
 }

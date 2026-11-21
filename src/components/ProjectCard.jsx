@@ -1,265 +1,135 @@
 import React from 'react';
+import { ArrowUpRight, Info, Laptop, Smartphone, Monitor } from 'lucide-react';
+import TechBadge from './TechBadge';
 
-export default function ProjectCard({ project, onSelect, index = 0 }) {
-  const renderMockup = () => {
-    switch (project.mockupType) {
-      case 'browser-image':
-        return (
-          <div className="w-full bg-surface-container-low rounded-xl overflow-hidden shadow-sm mb-space-lg flex flex-col">
-            <div className="h-9 bg-surface-container-low px-4 flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant/60"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant/40"></span>
-              </div>
-              <span className="font-label-sm text-label-sm text-on-surface-variant/80">{project.url}</span>
-              <span className="material-symbols-outlined text-[14px] text-outline">lock</span>
-            </div>
-            <div className="relative h-64 bg-surface-container-lowest overflow-hidden">
-              <img
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                alt={project.imageAlt}
-                src={project.image}
-              />
-              <div className="absolute bottom-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-sm">
-                <span className="font-label-sm text-label-sm font-semibold text-on-surface">
-                  {project.badgeText}
-                </span>
-              </div>
-            </div>
-          </div>
-        );
+export default function ProjectCard({ project, onSelect, index = 0, isRevealed = true }) {
+  const isInDevelopment = project.statusType === 'in-development';
+  const isComingSoon = project.statusType === 'coming-soon';
+  const isApplication = project.category === 'applications';
 
-      case 'mobile-finflow':
-        return (
-          <div className="w-full bg-surface-container-low rounded-xl p-6 shadow-sm mb-space-lg flex justify-center items-center">
-            <div className="w-64 bg-on-surface rounded-[2rem] p-3 shadow-lg flex flex-col">
-              <div className="w-20 h-4 bg-on-surface-variant/40 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-outline-variant"></div>
-              </div>
-              <div className="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-3">
-                <div className="flex justify-between items-center">
-                  <span className="font-label-sm text-label-sm text-on-surface-variant">Current Balance</span>
-                  <span className="font-label-sm text-label-sm text-primary font-bold">USD</span>
-                </div>
-                <div className="font-headline-md text-headline-md font-bold text-on-surface leading-none">
-                  {project.balance}
-                </div>
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <div className="bg-primary text-on-primary text-center py-1.5 rounded-md font-label-sm text-label-sm font-semibold">
-                    Send
-                  </div>
-                  <div className="bg-surface-container-high text-on-surface text-center py-1.5 rounded-md font-label-sm text-label-sm font-semibold">
-                    Deposit
-                  </div>
-                </div>
-                <div className="pt-2">
-                  <span className="font-label-sm text-label-sm text-on-surface-variant font-semibold block mb-1">
-                    Recent Activity
-                  </span>
-                  <div className="flex items-center justify-between py-1 bg-surface-container-low px-2 rounded">
-                    <span className="font-body-sm text-body-sm font-medium text-on-surface">Stripe Payout</span>
-                    <span className="font-body-sm text-body-sm font-bold text-primary">+$3,400</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'mobile-carepulse':
-        return (
-          <div className="w-full bg-surface-container-low rounded-xl p-6 shadow-sm mb-space-lg flex justify-center items-center">
-            <div className="w-64 bg-on-surface rounded-[2rem] p-3 shadow-lg flex flex-col">
-              <div className="w-20 h-4 bg-on-surface-variant/40 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-outline-variant"></div>
-              </div>
-              <div className="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-label-sm text-label-sm text-on-surface-variant">Today's Schedule</span>
-                  <span className="w-2 h-2 rounded-full bg-primary-container"></span>
-                </div>
-                <div className="p-3 bg-surface-container-low rounded-lg">
-                  <span className="font-label-sm text-label-sm text-primary font-bold">14:00 PM · HD Video</span>
-                  <span className="font-headline-sm text-headline-sm font-semibold text-on-surface block mt-1">
-                    {project.doctor}
-                  </span>
-                  <span className="font-body-sm text-body-sm text-on-surface-variant">{project.specialty}</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-surface-container-highest/60 text-label-sm">
-                  <span className="text-on-surface-variant font-semibold">Avg Heart Rate</span>
-                  <span className="text-primary font-bold">{project.bpm}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'saas-kanban':
-        return (
-          <div className="w-full bg-surface-container-low rounded-xl overflow-hidden shadow-sm mb-space-lg flex flex-col">
-            <div className="h-9 bg-surface-container-low px-4 flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant/60"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant/40"></span>
-              </div>
-              <span className="font-label-sm text-label-sm text-on-surface-variant/80">{project.url}</span>
-              <span className="material-symbols-outlined text-[14px] text-outline">tune</span>
-            </div>
-            <div className="h-64 p-4 bg-surface-container-lowest grid grid-cols-2 gap-3 overflow-hidden">
-              <div className="bg-surface-container-low p-3 rounded-lg flex flex-col gap-2">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-label-sm text-label-sm font-bold text-on-surface">In Progress</span>
-                  <span className="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm font-semibold">
-                    3
-                  </span>
-                </div>
-                <div className="bg-surface-container-lowest p-2.5 rounded shadow-sm">
-                  <span className="font-body-sm text-body-sm font-semibold text-on-surface block leading-snug">
-                    Refactor Redis connection pool
-                  </span>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="font-label-sm text-label-sm text-primary font-bold">INFRA-204</span>
-                    <span className="w-4 h-4 rounded-full bg-primary-container text-on-primary text-[8px] flex items-center justify-center font-bold">
-                      JD
-                    </span>
-                  </div>
-                </div>
-                <div className="bg-surface-container-lowest p-2.5 rounded shadow-sm">
-                  <span className="font-body-sm text-body-sm font-semibold text-on-surface block leading-snug">
-                    Implement Webhook retries
-                  </span>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="font-label-sm text-label-sm text-on-surface-variant">API-91</span>
-                    <span className="w-4 h-4 rounded-full bg-secondary-container text-on-primary text-[8px] flex items-center justify-center font-bold">
-                      AL
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-surface-container-low p-3 rounded-lg flex flex-col gap-2">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-label-sm text-label-sm font-bold text-on-surface">Done</span>
-                  <span className="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm font-semibold">
-                    12
-                  </span>
-                </div>
-                <div className="bg-surface-container-lowest p-2.5 rounded shadow-sm opacity-80">
-                  <span className="font-body-sm text-body-sm font-semibold text-on-surface block leading-snug">
-                    Setup multi-region replication
-                  </span>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="font-label-sm text-label-sm text-on-surface-variant">SYS-102</span>
-                    <span className="w-4 h-4 rounded-full bg-on-surface text-surface-container-lowest text-[8px] flex items-center justify-center font-bold">
-                      ✓
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'saas-analytics':
-        return (
-          <div className="w-full bg-surface-container-low rounded-xl overflow-hidden shadow-sm mb-space-lg flex flex-col">
-            <div className="h-9 bg-surface-container-low px-4 flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant/60"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-outline-variant/40"></span>
-              </div>
-              <span className="font-label-sm text-label-sm text-on-surface-variant/80">{project.url}</span>
-              <span className="material-symbols-outlined text-[14px] text-outline">tune</span>
-            </div>
-            <div className="h-64 p-5 bg-surface-container-lowest flex flex-col justify-between">
-              <div>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
-                    Annualized ARR
-                  </span>
-                  <span className="font-label-sm text-label-sm text-primary font-bold">{project.growth}</span>
-                </div>
-                <div className="font-headline-md text-headline-md font-bold text-on-surface">{project.arr}</div>
-              </div>
-              <div className="pt-2">
-                <span className="font-label-sm text-label-sm text-on-surface-variant block mb-2">
-                  Ingestion Throughput (req/sec)
-                </span>
-                <div className="flex items-end gap-2 h-20 bg-surface-container-low p-2 rounded-lg">
-                  <div className="w-full bg-primary-fixed rounded-t" style={{ height: '35%' }}></div>
-                  <div className="w-full bg-primary-fixed rounded-t" style={{ height: '55%' }}></div>
-                  <div className="w-full bg-primary-fixed rounded-t" style={{ height: '45%' }}></div>
-                  <div className="w-full bg-primary-fixed rounded-t" style={{ height: '75%' }}></div>
-                  <div className="w-full bg-primary-fixed rounded-t" style={{ height: '60%' }}></div>
-                  <div className="w-full bg-primary-fixed rounded-t" style={{ height: '90%' }}></div>
-                  <div className="w-full bg-primary-container rounded-t" style={{ height: '100%' }}></div>
-                </div>
-              </div>
-              <div className="flex justify-between text-on-surface-variant font-label-sm text-label-sm pt-1">
-                <span>Net Retention: 124%</span>
-                <span className="text-on-surface font-semibold">9.4M Data Points/hr</span>
-              </div>
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
+  const renderDeviceBadge = () => {
+    if (isApplication) {
+      return <Smartphone className="w-3.5 h-3.5 text-white" />;
     }
+    if (project.category === 'custom-software') {
+      return <Laptop className="w-3.5 h-3.5 text-white" />;
+    }
+    return <Monitor className="w-3.5 h-3.5 text-white" />;
   };
 
-  // Calculate subtle stagger delay for project cards
-  const cardDelay = `${0.35 + index * 0.12}s`;
+  // Stagger delay calculation: ~160ms per card index
+  const staggerDelay = `${index * 160}ms`;
 
   return (
     <article
-      className="animate-work-card group flex flex-col bg-surface-container-lowest rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 p-space-lg"
-      data-category={project.category}
-      style={{ animationDelay: cardDelay }}
+      className={`group relative flex flex-col bg-white rounded-[22px] border border-blue-50/80 shadow-[0_6px_25px_rgba(37,99,235,0.06),0_1px_4px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(11,92,255,0.12),0_4px_12px_rgba(0,0,0,0.03)] hover:-translate-y-1.5 transition-shadow duration-300 overflow-hidden ${isRevealed ? 'portfolio-card-revealed' : 'portfolio-card-hidden'
+        }`}
+      style={{
+        animationDelay: isRevealed ? staggerDelay : '0ms'
+      }}
     >
-      {renderMockup()}
+      {/* 1. Project Thumbnail: Portrait for Applications, Landscape for Websites */}
+      <div
+        className={`relative w-full overflow-hidden cursor-pointer ${
+          isApplication
+            ? 'h-72 sm:h-80 md:h-84 bg-gradient-to-b from-slate-100/90 via-blue-50/40 to-slate-100/90 p-4 flex items-center justify-center'
+            : 'aspect-[16/10] bg-gradient-to-b from-slate-50 to-slate-100'
+        }`}
+        onClick={() => onSelect && onSelect(project)}
+      >
+        <img
+          src={project.image}
+          alt={project.title}
+          className={`transition-transform duration-500 ease-out group-hover:scale-105 ${
+            isApplication
+              ? 'h-full w-auto max-w-full object-contain rounded-xl drop-shadow-[0_8px_20px_rgba(15,23,42,0.14)]'
+              : 'w-full h-full object-cover object-top'
+          }`}
+          loading="lazy"
+        />
 
-      {/* Metadata & Details */}
-      <div className="flex items-center gap-2 mb-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
-        <span className="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">
-          {project.type}
-        </span>
+        {/* Top-Left: Status Badge only for ongoing projects */}
+        {(isInDevelopment || isComingSoon) && (
+          <div className="absolute top-3.5 left-3.5 z-10">
+            {isInDevelopment ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-slate-800 text-xs font-semibold backdrop-blur-md shadow-xs border border-slate-100">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                In Development
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-slate-800 text-xs font-semibold backdrop-blur-md shadow-xs border border-slate-100">
+                <span className="w-2 h-2 rounded-full bg-purple-500" />
+                Coming Soon
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Top-Right: Blue circular device icon */}
+        <div className="absolute top-3.5 right-3.5 z-10 w-7 h-7 rounded-lg bg-[#0b5cff]/90 backdrop-blur-md flex items-center justify-center shadow-xs">
+          {renderDeviceBadge()}
+        </div>
       </div>
 
-      <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface mb-2">
-        {project.title}
-      </h3>
-
-      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-space-md">
-        {project.description}
-      </p>
-
-      {/* Tech Stack Tags */}
-      <div className="flex flex-wrap gap-2 mb-space-lg">
-        {project.tags.map((tag, idx) => (
-          <span
-            key={idx}
-            className="px-2.5 py-1 rounded-md bg-surface-container-low font-label-sm text-label-sm text-on-surface-variant"
+      {/* 2. Card Content */}
+      <div className="p-6 flex-1 flex flex-col justify-between">
+        <div>
+          {/* Project Title with top-right diagonal arrow icon */}
+          <h3
+            onClick={() => onSelect && onSelect(project)}
+            className="text-lg sm:text-[19px] font-bold text-slate-900 group-hover:text-[#0b5cff] transition-colors cursor-pointer leading-snug mb-2 flex items-center gap-1.5"
           >
-            {tag}
-          </span>
-        ))}
-      </div>
+            <span>{project.title}</span>
+            <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-[#0b5cff] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+          </h3>
 
-      {/* Action Link */}
-      <div className="mt-auto pt-space-sm flex items-center">
-        <button
-          type="button"
-          onClick={() => onSelect && onSelect(project)}
-          className="inline-flex items-center gap-1.5 font-label-md text-label-md text-primary font-semibold hover:text-secondary group-hover:translate-x-1 transition-all cursor-pointer"
-        >
-          View Project Details{' '}
-          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-        </button>
+          {/* Short Description */}
+          <p className="text-[13.5px] text-slate-500 leading-relaxed font-normal mb-5 line-clamp-2">
+            {project.description}
+          </p>
+
+          {/* Redesigned Technology Stack Badges with Official Logos */}
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-6">
+            {project.tags.map((tag, idx) => (
+              <TechBadge key={idx} name={tag} />
+            ))}
+          </div>
+        </div>
+
+        {/* 3. Card Footer */}
+        <div className="pt-4 border-t border-slate-100/90 flex items-center justify-between gap-3 mt-auto">
+          {/* Project Details button with info icon */}
+          <button
+            type="button"
+            onClick={() => onSelect && onSelect(project)}
+            className="inline-flex items-center gap-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-[#0b5cff] transition-colors cursor-pointer"
+          >
+            <Info className="w-4 h-4 text-slate-400" />
+            <span>Project Details</span>
+          </button>
+
+          {/* Blue Live Demo Button */}
+          {project.demoUrl ? (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0b5cff] hover:bg-[#004cd8] text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(11,92,255,0.35)] hover:-translate-y-0.5 transition-all duration-150 cursor-pointer"
+            >
+              <span>Live Demo</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={() => onSelect && onSelect(project)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 text-[#0b5cff] hover:bg-blue-100 text-xs sm:text-[13px] font-semibold transition-colors cursor-pointer"
+            >
+              <span>Preview</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
       </div>
     </article>
   );
