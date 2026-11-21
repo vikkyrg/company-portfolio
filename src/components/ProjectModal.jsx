@@ -53,12 +53,19 @@ export default function ProjectModal({ project, projectsList = [], onSelectProje
     };
 
     const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
     document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
 
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [currentImageIndex, totalImages, onClose]);
@@ -170,6 +177,8 @@ export default function ProjectModal({ project, projectsList = [], onSelectProje
                     key={`${project.id}-${currentImageIndex}`}
                     src={currentImage}
                     alt={project.title}
+                    decoding="async"
+                    loading="eager"
                     className={`transition-opacity duration-200 ${
                       isApplication
                         ? 'h-full w-auto max-w-full object-contain rounded-xl drop-shadow-[0_12px_28px_rgba(15,23,42,0.18)]'

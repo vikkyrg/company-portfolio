@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { ArrowUpRight, Info, Laptop, Smartphone, Monitor } from 'lucide-react';
 import TechBadge from './TechBadge';
 
-export default function ProjectCard({ project, onSelect, index = 0, isRevealed = true }) {
+function ProjectCard({ project, onSelect, index = 0, isRevealed = true }) {
   const isInDevelopment = project.statusType === 'in-development';
   const isComingSoon = project.statusType === 'coming-soon';
   const isApplication = project.category === 'applications';
@@ -22,8 +22,9 @@ export default function ProjectCard({ project, onSelect, index = 0, isRevealed =
 
   return (
     <article
-      className={`group relative flex flex-col bg-white rounded-[22px] border border-blue-50/80 shadow-[0_6px_25px_rgba(37,99,235,0.06),0_1px_4px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(11,92,255,0.12),0_4px_12px_rgba(0,0,0,0.03)] hover:-translate-y-1.5 transition-shadow duration-300 overflow-hidden ${isRevealed ? 'portfolio-card-revealed' : 'portfolio-card-hidden'
-        }`}
+      className={`group relative flex flex-col bg-white rounded-[22px] border border-blue-50/80 shadow-[0_6px_25px_rgba(37,99,235,0.06),0_1px_4px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(11,92,255,0.12),0_4px_12px_rgba(0,0,0,0.03)] hover:-translate-y-1.5 transition-shadow duration-300 overflow-hidden ${
+        isRevealed ? 'portfolio-card-revealed' : 'portfolio-card-hidden'
+      }`}
       style={{
         animationDelay: isRevealed ? staggerDelay : '0ms'
       }}
@@ -40,12 +41,15 @@ export default function ProjectCard({ project, onSelect, index = 0, isRevealed =
         <img
           src={project.image}
           alt={project.title}
+          width={isApplication ? 300 : 640}
+          height={isApplication ? 533 : 400}
+          decoding="async"
+          loading="lazy"
           className={`transition-transform duration-500 ease-out group-hover:scale-105 ${
             isApplication
               ? 'h-full w-auto max-w-full object-contain rounded-xl drop-shadow-[0_8px_20px_rgba(15,23,42,0.14)]'
               : 'w-full h-full object-cover object-top'
           }`}
-          loading="lazy"
         />
 
         {/* Top-Left: Status Badge only for ongoing projects */}
@@ -134,3 +138,11 @@ export default function ProjectCard({ project, onSelect, index = 0, isRevealed =
     </article>
   );
 }
+
+export default memo(ProjectCard, (prevProps, nextProps) => {
+  return (
+    prevProps.project.id === nextProps.project.id &&
+    prevProps.isRevealed === nextProps.isRevealed &&
+    prevProps.index === nextProps.index
+  );
+});

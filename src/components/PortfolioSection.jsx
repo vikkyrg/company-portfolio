@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import CategoryTabs from './CategoryTabs';
 import ProjectCard from './ProjectCard';
 import ProjectModal from './ProjectModal';
@@ -59,17 +59,27 @@ export default function PortfolioSection() {
   }, []);
 
   // Smooth Category Switching Handler with fade-out / fade-in
-  const handleTabChange = (newTab) => {
-    if (newTab === activeTab) return;
-    setIsSwitchingCategory(true);
-    setTimeout(() => {
-      setActiveTab(newTab);
-      // Let newly rendered cards mount then smoothly fade in
-      requestAnimationFrame(() => {
-        setIsSwitchingCategory(false);
-      });
-    }, 180);
-  };
+  const handleTabChange = useCallback((newTab) => {
+    setActiveTab((current) => {
+      if (newTab === current) return current;
+      setIsSwitchingCategory(true);
+      setTimeout(() => {
+        setActiveTab(newTab);
+        requestAnimationFrame(() => {
+          setIsSwitchingCategory(false);
+        });
+      }, 180);
+      return current;
+    });
+  }, []);
+
+  const handleSelectProject = useCallback((project) => {
+    setSelectedProject(project);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedProject(null);
+  }, []);
 
   // Compute project counts for each category tab
   const categoryCounts = useMemo(() => {
@@ -321,7 +331,7 @@ export default function PortfolioSection() {
               project={project}
               index={idx}
               isRevealed={isGridInView && !isSwitchingCategory}
-              onSelect={(p) => setSelectedProject(p)}
+              onSelect={handleSelectProject}
             />
           ))}
         </div>
@@ -341,8 +351,8 @@ export default function PortfolioSection() {
         <ProjectModal
           project={selectedProject}
           projectsList={displayedProjects}
-          onSelectProject={(p) => setSelectedProject(p)}
-          onClose={() => setSelectedProject(null)}
+          onSelectProject={handleSelectProject}
+          onClose={handleCloseModal}
         />
       )}
     </section>

@@ -6,10 +6,16 @@ export default function Header() {
 
   useEffect(() => {
     let ticking = false;
+    let lastScrolled = false;
+
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 15);
+          const currentScrolled = window.scrollY > 15;
+          if (currentScrolled !== lastScrolled) {
+            lastScrolled = currentScrolled;
+            setIsScrolled(currentScrolled);
+          }
           ticking = false;
         });
         ticking = true;
