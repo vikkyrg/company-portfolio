@@ -180,6 +180,7 @@ html {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -518,6 +519,14 @@ html {
   opacity: 0;
   transform: translateY(30px) scale(0.98);
   will-change: opacity, transform;
+}
+
+/* Fallback: on mobile screens, guarantee visibility even before animation triggers */
+@media (max-width: 639px) {
+  .portfolio-card-hidden {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .portfolio-card-revealed {

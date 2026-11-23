@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import CategoryTabs from './CategoryTabs';
+import CategoryTabs, { getCategoryIcon } from './CategoryTabs';
 import ProjectCard from './ProjectCard';
 import ProjectModal from './ProjectModal';
 import { filterCategories, allProjects } from '../data/projects';
-import { Layers } from 'lucide-react';
+import { Layers, Globe, Code2 } from 'lucide-react';
 
 export default function PortfolioSection() {
   const [activeTab, setActiveTab] = useState('websites');
@@ -11,30 +11,38 @@ export default function PortfolioSection() {
   const [isGridInView, setIsGridInView] = useState(false);
   const [isHeaderInView, setIsHeaderInView] = useState(false);
   const [isSwitchingCategory, setIsSwitchingCategory] = useState(false);
-  const gridRef = useRef(null);
+  const mobileGridRef = useRef(null);
+  const desktopGridRef = useRef(null);
   const headerRef = useRef(null);
 
-  // Trigger sequential staggered reveal animation only once when cards enter viewport
+  // Trigger sequential staggered reveal animation when either mobile or desktop cards enter viewport
   useEffect(() => {
-    const target = gridRef.current;
-    if (!target) return;
+    // Immediate fallback: ensure cards are visible without waiting for observer
+    const fallbackTimer = setTimeout(() => {
+      setIsGridInView(true);
+    }, 150);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsGridInView(true);
-          observer.disconnect(); // Animate only once; do not replay on scroll
+          observer.disconnect();
+          clearTimeout(fallbackTimer);
         }
       },
       {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
+        threshold: 0.05,
+        rootMargin: '0px 0px 50px 0px'
       }
     );
 
-    observer.observe(target);
+    if (mobileGridRef.current) observer.observe(mobileGridRef.current);
+    if (desktopGridRef.current) observer.observe(desktopGridRef.current);
 
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(fallbackTimer);
+      observer.disconnect();
+    };
   }, []);
 
   // Header scroll reveal
@@ -98,7 +106,7 @@ export default function PortfolioSection() {
   return (
     <section
       id="portfolio"
-      className="relative w-full min-h-screen pt-4 sm:pt-6 pb-16 sm:pb-24 overflow-hidden bg-gradient-to-b from-[#F8FBFF] via-[#EAF3FF] to-[#DCEBFF] animate-bg-gradient"
+      className="relative w-full min-h-screen pt-4 sm:pt-6 pb-16 sm:pb-24 sm:overflow-hidden bg-gradient-to-b from-[#F8FBFF] via-[#EAF3FF] to-[#DCEBFF] animate-bg-gradient"
     >
       {/* 
         ========================================================================
@@ -274,7 +282,7 @@ export default function PortfolioSection() {
         <div className="animate-geo-2 absolute bottom-[20%] left-[12%] w-52 h-52 border border-[#2563eb]/10 rounded-2xl pointer-events-none" />
       </div>
 
-      <div className="relative max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div className="relative max-w-[1320px] mx-auto px-2 xs:px-3 sm:px-6 lg:px-8 z-10">
         {/* Header Section: "Our Portfolio" and subtitle with deep navy typography */}
         <div
           ref={headerRef}
@@ -316,10 +324,74 @@ export default function PortfolioSection() {
           counts={categoryCounts}
         />
 
-        {/* Responsive Project Card Grid Layout with smooth category transition */}
+        {/* 
+          ========================================================================
+          MOBILE RESPONSIVE SIDEBAR + GRID LAYOUT (sm:hidden)
+          - Left narrow sidebar containing compact vertical icon tabs
+          - Right area containing responsive 1-column / 2-column project cards
+          - Centered and balanced layout across all mobile device screen widths
+          ========================================================================
+        */}
+        <div className="flex sm:hidden items-start justify-center gap-2 xs:gap-3 sm:gap-3.5 mb-10 w-full max-w-[620px] mx-auto">
+          {/* Compact Vertical Tab Navigation Sidebar - Sticky & vertically centered in viewport */}
+          <div
+            role="tablist"
+            aria-label="Portfolio Categories Vertical Navigation"
+            className="sticky top-1/2 -translate-y-1/2 z-30 shrink-0 flex flex-col gap-1.5 xs:gap-2 p-1 xs:p-1.5 bg-white/95 backdrop-blur-md rounded-2xl border border-blue-100/80 shadow-[0_4px_20px_rgba(37,99,235,0.08),0_1px_3px_rgba(0,0,0,0.02)]"
+          >
+            {filterCategories.map((cat) => {
+              const isActive = activeTab === cat.id;
+              return (
+                <button
+                  key={`mobile-vtab-${cat.id}`}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={cat.label}
+                  type="button"
+                  onClick={() => handleTabChange(cat.id)}
+                  className={`w-10 h-10 xs:w-11 xs:h-11 rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-[#0b5cff] ${
+                    isActive
+                      ? 'bg-[#0b5cff] text-white shadow-[0_4px_14px_rgba(11,92,255,0.38)]'
+                      : 'bg-white text-slate-600 hover:text-[#0b5cff] hover:bg-blue-50/80 shadow-xs'
+                  }`}
+                >
+                  {getCategoryIcon(cat.id, "w-4 h-4 xs:w-5 xs:h-5 shrink-0 stroke-[2.2]")}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Mobile Project Cards arranged to the right of vertical navigation */}
+          <div
+            ref={mobileGridRef}
+            className={`flex-1 min-w-0 grid grid-cols-1 xs:grid-cols-2 gap-2.5 xs:gap-3 sm:gap-4 items-stretch transition-all duration-300 ease-out ${
+              isSwitchingCategory
+                ? 'opacity-0 translate-y-3 pointer-events-none'
+                : 'opacity-100 translate-y-0'
+            }`}
+          >
+            {displayedProjects.map((project, idx) => (
+              <ProjectCard
+                key={`mobile-${activeTab}-${project.id}`}
+                project={project}
+                index={idx}
+                compact={true}
+                isRevealed={isGridInView && !isSwitchingCategory}
+                onSelect={handleSelectProject}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* 
+          ========================================================================
+          DESKTOP & TABLET PROJECT CARD GRID LAYOUT (sm:grid)
+          - Preserved exactly unchanged as per desktop requirements
+          ========================================================================
+        */}
         <div
-          ref={gridRef}
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch transition-all duration-300 ease-out ${
+          ref={desktopGridRef}
+          className={`hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch transition-all duration-300 ease-out ${
             isSwitchingCategory
               ? 'opacity-0 translate-y-3 pointer-events-none'
               : 'opacity-100 translate-y-0'
@@ -327,7 +399,7 @@ export default function PortfolioSection() {
         >
           {displayedProjects.map((project, idx) => (
             <ProjectCard
-              key={`${activeTab}-${project.id}`}
+              key={`desktop-${activeTab}-${project.id}`}
               project={project}
               index={idx}
               isRevealed={isGridInView && !isSwitchingCategory}

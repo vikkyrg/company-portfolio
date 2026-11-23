@@ -3,8 +3,24 @@ import {
   Globe,
   Smartphone,
   Code2,
-  Layers
+  Layers,
+  LayoutGrid
 } from 'lucide-react';
+
+export const getCategoryIcon = (id, className = "w-4 h-4") => {
+  switch (id) {
+    case 'websites':
+      return <Globe className={className} />;
+    case 'applications':
+      return <LayoutGrid className={className} />;
+    case 'custom-software':
+      return <Code2 className={className} />;
+    case 'in-development':
+      return <Layers className={className} />;
+    default:
+      return <Globe className={className} />;
+  }
+};
 
 export default function CategoryTabs({ categories, activeTab, onSelectTab, counts = {} }) {
   const containerRef = useRef(null);
@@ -72,31 +88,15 @@ export default function CategoryTabs({ categories, activeTab, onSelectTab, count
     return () => window.removeEventListener('resize', updateIndicator);
   }, [activeTab, categories]);
 
-  const getTabIcon = (id) => {
-    switch (id) {
-      case 'websites':
-        return (
-          <svg className="w-3.5 sm:w-4 h-3.5 sm:h-4 shrink-0 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="7" height="7" rx="1.5" />
-            <rect x="14" y="3" width="7" height="7" rx="1.5" />
-            <rect x="14" y="14" width="7" height="7" rx="1.5" />
-            <rect x="3" y="14" width="7" height="7" rx="1.5" />
-          </svg>
-        );
-      case 'applications':
-        return <Smartphone className="w-3.5 sm:w-4 h-3.5 sm:h-4 shrink-0 stroke-[2.2] transition-colors duration-300" />;
-      case 'custom-software':
-        return <Code2 className="w-3.5 sm:w-4 h-3.5 sm:h-4 shrink-0 stroke-[2.2] transition-colors duration-300" />;
-      case 'in-development':
-        return <Layers className="w-3.5 sm:w-4 h-3.5 sm:h-4 shrink-0 stroke-[2.2] transition-colors duration-300" />;
-      default:
-        return <Globe className="w-3.5 sm:w-4 h-3.5 sm:h-4 shrink-0 stroke-[2.2] transition-colors duration-300" />;
-    }
-  };
-
   return (
-    <div className="w-full flex justify-center mb-10 sm:mb-14 px-2 sm:px-4">
-      {/* Responsive Wrapper with Side Fade Indicators on Mobile */}
+    <div className="w-full flex flex-col items-center mb-6 sm:mb-14 px-2 sm:px-4">
+      {/* 
+        ========================================================================
+        1. EXISTING HORIZONTAL TAB NAVIGATION (Top)
+        - Preserved exactly as it is for desktop & mobile
+        - Horizontally scrollable row with active pill, icons, badges & smooth scroll
+        ========================================================================
+      */}
       <div className="relative max-w-full">
         {/* Left Fade Overflow Indicator (Mobile) */}
         <div
@@ -120,11 +120,11 @@ export default function CategoryTabs({ categories, activeTab, onSelectTab, count
           onScroll={checkScrollFades}
           role="tablist"
           aria-label="Portfolio Category Filters"
-          className="relative flex items-center p-1 sm:p-2 bg-white/95 backdrop-blur-md rounded-full border border-blue-100/80 shadow-[0_4px_24px_rgba(37,99,235,0.06),0_1px_3px_rgba(0,0,0,0.02)] gap-1 sm:gap-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x"
+          className="relative flex items-center p-1 sm:p-2 bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-full border border-blue-100/80 shadow-[0_4px_24px_rgba(37,99,235,0.06),0_1px_3px_rgba(0,0,0,0.02)] gap-1 sm:gap-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x"
         >
           {/* Shared Sliding Indicator Pill */}
           <div
-            className="absolute top-1 sm:top-2 bottom-1 sm:bottom-2 rounded-full bg-[#0b5cff] shadow-[0_4px_14px_rgba(11,92,255,0.35)] transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none"
+            className="absolute top-1 sm:top-2 bottom-1 sm:bottom-2 rounded-xl sm:rounded-full bg-[#0b5cff] shadow-[0_4px_14px_rgba(11,92,255,0.35)] transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none"
             style={{
               transform: `translateX(${indicatorStyle.left}px)`,
               width: `${indicatorStyle.width}px`,
@@ -147,13 +147,13 @@ export default function CategoryTabs({ categories, activeTab, onSelectTab, count
                 tabIndex={isActive ? 0 : -1}
                 type="button"
                 onClick={() => onSelectTab(cat.id)}
-                className={`group relative z-10 px-3.5 sm:px-6 py-2 sm:py-3 rounded-full font-medium text-[11.5px] sm:text-sm tracking-tight transition-colors duration-300 whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5 sm:gap-2 select-none outline-none focus-visible:ring-2 focus-visible:ring-[#0b5cff] focus-visible:ring-offset-2 ${
+                className={`group relative z-10 px-3.5 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-full font-medium text-[11.5px] sm:text-sm tracking-tight transition-colors duration-300 whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5 sm:gap-2 select-none outline-none focus-visible:ring-2 focus-visible:ring-[#0b5cff] focus-visible:ring-offset-2 ${
                   isActive
                     ? 'text-white font-semibold'
                     : 'text-[#1e293b] hover:text-[#0b5cff] hover:bg-blue-50/70'
                 }`}
               >
-                {getTabIcon(cat.id)}
+                {getCategoryIcon(cat.id, "w-3.5 sm:w-4 h-3.5 sm:h-4 shrink-0 transition-colors duration-300")}
                 <span>{cat.label}</span>
                 {typeof count === 'number' && (
                   <span
