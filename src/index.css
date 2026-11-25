@@ -266,12 +266,12 @@ html {
 
 .animate-wave-flow-tl {
   animation: bgWaveFlow1 14s ease-in-out infinite;
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
 .animate-wave-flow-br {
   animation: bgWaveFlow2 17s ease-in-out infinite;
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
 /* 3. Floating Blue Orbs: Independent Scale, Float & Opacity */
@@ -343,22 +343,18 @@ html {
 
 .animate-orb-1 {
   animation: orbFloat1 11s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 .animate-orb-2 {
   animation: orbFloat2 15s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 .animate-orb-3 {
   animation: orbFloat3 13s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 .animate-orb-4 {
   animation: orbFloat4 19s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 /* 4. Dotted Grid Gentle Shimmer / Pulse */
@@ -392,12 +388,10 @@ html {
 
 .animate-grid-shimmer-l {
   animation: gridShimmerLeft 9s ease-in-out infinite;
-  will-change: opacity, transform;
 }
 
 .animate-grid-shimmer-r {
   animation: gridShimmerRight 12s ease-in-out infinite;
-  will-change: opacity, transform;
 }
 
 /* 5. Slow Background Gradient Shifting Transition */
@@ -449,12 +443,10 @@ html {
 
 .animate-geo-1 {
   animation: geoRotate1 16s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 .animate-geo-2 {
   animation: geoRotate2 20s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 /* Responsive / Reduced Motion Guards */

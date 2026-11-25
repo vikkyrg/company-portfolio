@@ -326,6 +326,71 @@ export function TechIcon({ name }) {
     );
   }
 
+  // JWT / JWT Authentication
+  if (lower.includes('jwt') || lower.includes('token')) {
+    return (
+      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
+        <rect width="24" height="24" rx="5" fill="#D63AFF" />
+        <path
+          d="M12 4L4 7.5V12C4 16.5 7.5 20.2 12 21C16.5 20.2 20 16.5 20 12V7.5L12 4Z"
+          fill="white"
+        />
+        <path
+          d="M12 7L6 9.5V12C6 15.3 8.5 18 12 18.8C15.5 18 18 15.3 18 12V9.5L12 7Z"
+          fill="#D63AFF"
+        />
+        <circle cx="12" cy="13" r="2" fill="white" />
+      </svg>
+    );
+  }
+
+  // Axios
+  if (lower.includes('axios')) {
+    return (
+      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10.5" fill="#5A29E4" />
+        <path
+          d="M7 16L12 7L17 16M9 13.5H15"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  // REST API / API
+  if (lower.includes('rest') || lower.includes('api')) {
+    return (
+      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" fill="#e0f2fe" stroke="#0284c7" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+      </svg>
+    );
+  }
+
+  // Mongoose
+  if (lower.includes('mongoose')) {
+    return (
+      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10.5" fill="#880000" />
+        <text
+          x="12"
+          y="16"
+          textAnchor="middle"
+          fill="#ffffff"
+          fontSize="11"
+          fontFamily="system-ui, -apple-system, sans-serif"
+          fontWeight="bold"
+        >
+          M
+        </text>
+      </svg>
+    );
+  }
+
   // Default clean code symbol badge
   return (
     <svg className="w-3.5 h-3.5 shrink-0 text-[#0b5cff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -1,16 +1,16 @@
-import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import CategoryTabs, { getCategoryIcon } from './CategoryTabs';
 import ProjectCard from './ProjectCard';
-import ProjectModal from './ProjectModal';
 import { filterCategories, allProjects } from '../data/projects';
 import { Layers, Globe, Code2 } from 'lucide-react';
+
+const ProjectModal = lazy(() => import('./ProjectModal'));
 
 export default function PortfolioSection() {
   const [activeTab, setActiveTab] = useState('websites');
   const [selectedProject, setSelectedProject] = useState(null);
   const [isGridInView, setIsGridInView] = useState(false);
   const [isHeaderInView, setIsHeaderInView] = useState(false);
-  const [isSwitchingCategory, setIsSwitchingCategory] = useState(false);
   const mobileGridRef = useRef(null);
   const desktopGridRef = useRef(null);
   const headerRef = useRef(null);
@@ -66,19 +66,9 @@ export default function PortfolioSection() {
     return () => observer.disconnect();
   }, []);
 
-  // Smooth Category Switching Handler with fade-out / fade-in
+  // Immediate Category Switching Handler (no delays or artificial timeouts)
   const handleTabChange = useCallback((newTab) => {
-    setActiveTab((current) => {
-      if (newTab === current) return current;
-      setIsSwitchingCategory(true);
-      setTimeout(() => {
-        setActiveTab(newTab);
-        requestAnimationFrame(() => {
-          setIsSwitchingCategory(false);
-        });
-      }, 180);
-      return current;
-    });
+    setActiveTab(newTab);
   }, []);
 
   const handleSelectProject = useCallback((project) => {
@@ -110,27 +100,22 @@ export default function PortfolioSection() {
     >
       {/* 
         ========================================================================
-        PREMIUM ANIMATED BLUE-THEMED ARCHITECTURAL BACKGROUND
-        - Slow, calm continuous movement (8s to 20s per cycle)
-        - Non-synchronized organic flow
-        - Large corner gradient shapes slowly drifting
-        - Curved SVG wave lines gently flowing
-        - Floating blue gradient spheres with subtle scale & opacity variations
-        - Dotted grid patterns with soft shimmer / pulse
-        - Abstract diagonal geometric shapes with smooth rotation
-        - Center content area completely clean & static
+        LIGHTWEIGHT BLUE-THEMED ARCHITECTURAL BACKGROUND
+        - Optimized GPU layer rendering: removed heavy 110px/130px blur-filters
+        - Lightweight SVG curves with hardware-accelerated will-change: transform
+        - Static center ambient glow using soft radial gradients without heavy filters
         ========================================================================
       */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden" aria-hidden="true">
-        {/* Ambient Center Lighting (Keeps center text and cards crisp and legible) */}
-        <div className="absolute top-[12%] left-1/2 -translate-x-1/2 w-[900px] h-[550px] rounded-full bg-white/70 blur-[110px]" />
-        <div className="absolute top-[45%] left-1/2 -translate-x-1/2 w-[1000px] h-[650px] rounded-full bg-white/50 blur-[130px]" />
+        {/* Ambient Center Lighting using pure CSS radial gradients instead of heavy GPU blur filters */}
+        <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[900px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.85)_0%,rgba(255,255,255,0)_70%)]" />
+        <div className="absolute top-[45%] left-1/2 -translate-x-1/2 w-[1000px] h-[650px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_70%)]" />
 
         {/* -------------------------------------------------------------
             TOP-LEFT CORNER: Large Flowing Shapes, Waves & Orbs
             ------------------------------------------------------------- */}
-        {/* Layer 1: Deep ambient soft blob with slow drift */}
-        <div className="animate-corner-tl absolute -top-36 -left-36 w-[560px] h-[560px] rounded-full bg-gradient-to-br from-[#bfdbfe]/50 via-[#c7dcfa]/30 to-transparent blur-3xl" />
+        {/* Layer 1: Soft ambient gradient corner blob */}
+        <div className="animate-corner-tl absolute -top-36 -left-36 w-[560px] h-[560px] rounded-full bg-[radial-gradient(circle,rgba(191,219,254,0.45)_0%,rgba(199,220,250,0.2)_40%,transparent_70%)]" />
 
         {/* Layer 2: Large organic flowing vector shape with gentle floating motion */}
         <svg
@@ -187,15 +172,15 @@ export default function PortfolioSection() {
           />
         </svg>
 
-        {/* Floating Gradient Orbs in Top-Left (independent floating rates) */}
-        <div className="animate-orb-1 absolute top-20 left-[18%] w-14 h-14 rounded-full bg-gradient-to-tr from-[#2563eb]/30 to-[#93c5fd]/50 shadow-[0_8px_20px_rgba(37,99,235,0.12)] blur-[1px]" />
-        <div className="animate-orb-2 absolute top-48 left-[7%] w-7 h-7 rounded-full bg-gradient-to-tr from-[#004ac6]/25 to-[#bfdbfe]/60 shadow-[0_4px_12px_rgba(0,74,198,0.1)] blur-[0.5px]" />
+        {/* Floating Gradient Orbs in Top-Left (hardware accelerated) */}
+        <div className="animate-orb-1 absolute top-20 left-[18%] w-14 h-14 rounded-full bg-gradient-to-tr from-[#2563eb]/30 to-[#93c5fd]/50 shadow-[0_8px_20px_rgba(37,99,235,0.12)]" />
+        <div className="animate-orb-2 absolute top-48 left-[7%] w-7 h-7 rounded-full bg-gradient-to-tr from-[#004ac6]/25 to-[#bfdbfe]/60 shadow-[0_4px_12px_rgba(0,74,198,0.1)]" />
 
         {/* -------------------------------------------------------------
             BOTTOM-RIGHT CORNER: Large Flowing Shapes, Waves & Orbs
             ------------------------------------------------------------- */}
-        {/* Layer 1: Deep ambient soft blob with slow drift */}
-        <div className="animate-corner-br absolute -bottom-44 -right-44 w-[650px] h-[650px] rounded-full bg-gradient-to-tl from-[#93c5fd]/45 via-[#bfdbfe]/30 to-transparent blur-3xl" />
+        {/* Layer 1: Soft ambient gradient corner blob */}
+        <div className="animate-corner-br absolute -bottom-44 -right-44 w-[650px] h-[650px] rounded-full bg-[radial-gradient(circle,rgba(147,197,253,0.4)_0%,rgba(191,219,254,0.2)_40%,transparent_70%)]" />
 
         {/* Layer 2: Organic flowing shape with gentle floating motion */}
         <svg
@@ -252,9 +237,9 @@ export default function PortfolioSection() {
           />
         </svg>
 
-        {/* Floating Gradient Orbs in Bottom Right Area (independent floating rates) */}
-        <div className="animate-orb-3 absolute bottom-28 right-[14%] w-16 h-16 rounded-full bg-gradient-to-tr from-[#1d4ed8]/25 via-[#3b82f6]/35 to-[#bfdbfe]/60 shadow-[0_10px_24px_rgba(29,78,216,0.12)] blur-[1px]" />
-        <div className="animate-orb-4 absolute bottom-56 right-[6%] w-8 h-8 rounded-full bg-gradient-to-tr from-[#2563eb]/30 to-[#93c5fd]/50 shadow-[0_4px_14px_rgba(37,99,235,0.1)] blur-[0.5px]" />
+        {/* Floating Gradient Orbs in Bottom Right Area */}
+        <div className="animate-orb-3 absolute bottom-28 right-[14%] w-16 h-16 rounded-full bg-gradient-to-tr from-[#1d4ed8]/25 via-[#3b82f6]/35 to-[#bfdbfe]/60 shadow-[0_10px_24px_rgba(29,78,216,0.12)]" />
+        <div className="animate-orb-4 absolute bottom-56 right-[6%] w-8 h-8 rounded-full bg-gradient-to-tr from-[#2563eb]/30 to-[#93c5fd]/50 shadow-[0_4px_14px_rgba(37,99,235,0.1)]" />
 
         {/* -------------------------------------------------------------
             DOTTED GRID PATTERNS: Left and Right Flanks with Shimmer
@@ -364,11 +349,7 @@ export default function PortfolioSection() {
           {/* Mobile Project Cards arranged to the right of vertical navigation */}
           <div
             ref={mobileGridRef}
-            className={`flex-1 min-w-0 grid grid-cols-1 xs:grid-cols-2 gap-2.5 xs:gap-3 sm:gap-4 items-stretch transition-all duration-300 ease-out ${
-              isSwitchingCategory
-                ? 'opacity-0 translate-y-3 pointer-events-none'
-                : 'opacity-100 translate-y-0'
-            }`}
+            className="flex-1 min-w-0 grid grid-cols-1 xs:grid-cols-2 gap-2.5 xs:gap-3 sm:gap-4 items-stretch"
           >
             {displayedProjects.map((project, idx) => (
               <ProjectCard
@@ -376,7 +357,7 @@ export default function PortfolioSection() {
                 project={project}
                 index={idx}
                 compact={true}
-                isRevealed={isGridInView && !isSwitchingCategory}
+                isRevealed={isGridInView}
                 onSelect={handleSelectProject}
               />
             ))}
@@ -391,18 +372,14 @@ export default function PortfolioSection() {
         */}
         <div
           ref={desktopGridRef}
-          className={`hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch transition-all duration-300 ease-out ${
-            isSwitchingCategory
-              ? 'opacity-0 translate-y-3 pointer-events-none'
-              : 'opacity-100 translate-y-0'
-          }`}
+          className="hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch"
         >
           {displayedProjects.map((project, idx) => (
             <ProjectCard
               key={`desktop-${activeTab}-${project.id}`}
               project={project}
               index={idx}
-              isRevealed={isGridInView && !isSwitchingCategory}
+              isRevealed={isGridInView}
               onSelect={handleSelectProject}
             />
           ))}
@@ -418,14 +395,16 @@ export default function PortfolioSection() {
         )}
       </div>
 
-      {/* Interactive Project Modal */}
+      {/* Interactive Project Modal (Dynamically loaded on demand with Suspense) */}
       {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          projectsList={displayedProjects}
-          onSelectProject={handleSelectProject}
-          onClose={handleCloseModal}
-        />
+        <Suspense fallback={null}>
+          <ProjectModal
+            project={selectedProject}
+            projectsList={displayedProjects}
+            onSelectProject={handleSelectProject}
+            onClose={handleCloseModal}
+          />
+        </Suspense>
       )}
     </section>
   );

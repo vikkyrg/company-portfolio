@@ -1,11 +1,55 @@
-import React, { memo } from 'react';
-import { ArrowUpRight, Info, Laptop, Smartphone, Monitor } from 'lucide-react';
+import React, { memo, useState, useEffect, useRef } from 'react';
+import { ArrowUpRight, Info, Laptop, Smartphone, Monitor, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import TechBadge from './TechBadge';
 
 function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact = false }) {
   const isInDevelopment = project.statusType === 'in-development';
   const isComingSoon = project.statusType === 'coming-soon';
   const isApplication = project.category === 'applications';
+
+  // Normalize image list for projects with multiple screenshots (e.g., Chan Constructions)
+  const cardImages = Array.isArray(project.images) && project.images.length > 0
+    ? project.images.map((img) => (typeof img === 'object' && img?.src ? img.src : img)).filter(Boolean)
+    : [];
+  const hasMultipleImages = cardImages.length > 1;
+
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const autoplayTimerRef = useRef(null);
+
+  // Auto-advance images every 4.5 seconds when not hovered/interacting
+  useEffect(() => {
+    if (!hasMultipleImages || isInteracting) {
+      if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current);
+      return;
+    }
+
+    autoplayTimerRef.current = setInterval(() => {
+      setActiveImgIndex((prev) => (prev + 1) % cardImages.length);
+    }, 4500);
+
+    return () => {
+      if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current);
+    };
+  }, [hasMultipleImages, isInteracting, cardImages.length]);
+
+  const handlePrevImage = (e) => {
+    e.stopPropagation();
+    setIsInteracting(true);
+    setActiveImgIndex((prev) => (prev > 0 ? prev - 1 : cardImages.length - 1));
+  };
+
+  const handleNextImage = (e) => {
+    e.stopPropagation();
+    setIsInteracting(true);
+    setActiveImgIndex((prev) => (prev + 1) % cardImages.length);
+  };
+
+  const handleSelectDot = (e, dotIdx) => {
+    e.stopPropagation();
+    setIsInteracting(true);
+    setActiveImgIndex(dotIdx);
+  };
 
   const renderDeviceBadge = () => {
     if (isApplication) {
@@ -19,6 +63,14 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
 
   // Stagger delay calculation: ~160ms per card index
   const staggerDelay = `${index * 160}ms`;
+
+  const coverImage = hasMultipleImages
+    ? cardImages[activeImgIndex]
+    : typeof project.image === 'object' && project.image?.src
+      ? project.image.src
+      : (Array.isArray(project.images) && project.images.length > 0 && typeof project.images[0] === 'object' && project.images[0]?.src)
+        ? project.images[0].src
+        : (cardImages[0] || project.image);
 
   return (
     <article
@@ -39,20 +91,79 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
             : 'aspect-[16/10] bg-gradient-to-b from-slate-50 to-slate-100'
         }`}
         onClick={() => onSelect && onSelect(project)}
+        onMouseEnter={() => setIsInteracting(true)}
+        onMouseLeave={() => setIsInteracting(false)}
       >
-        <img
-          src={project.image}
-          alt={project.title}
-          width={isApplication ? 300 : 640}
-          height={isApplication ? 533 : 400}
-          decoding="async"
-          loading="lazy"
-          className={`transition-transform duration-500 ease-out group-hover:scale-105 ${
-            isApplication
-              ? 'h-full w-auto max-w-full object-contain rounded-xl drop-shadow-[0_8px_20px_rgba(15,23,42,0.14)]'
-              : 'w-full h-full object-cover object-top'
-          }`}
-        />
+        {coverImage ? (
+          <img
+            key={coverImage}
+            src={coverImage}
+            alt={`${project.title} - Preview ${activeImgIndex + 1}`}
+            width={isApplication ? 300 : 640}
+            height={isApplication ? 533 : 400}
+            decoding="async"
+            loading="lazy"
+            className={`transition-all duration-500 ease-out ${
+              isApplication
+                ? 'h-full w-auto max-w-full object-contain rounded-xl drop-shadow-[0_8px_20px_rgba(15,23,42,0.14)] group-hover:scale-105'
+                : 'w-full h-full object-cover object-top'
+            }`}
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50/60 via-slate-50 to-blue-100/40 p-6 text-center select-none group-hover:scale-102 transition-transform duration-300">
+            <div className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-blue-100 flex items-center justify-center text-[#0b5cff] mb-2.5">
+              <Globe className="w-6 h-6 stroke-[1.8]" />
+            </div>
+            <span className="text-xs font-semibold text-slate-700 tracking-tight">
+              {project.title}
+            </span>
+            <span className="text-[10px] text-[#0b5cff] font-medium mt-0.5">
+              {project.url?.replace(/^https?:\/\//, '') || 'Website Showcase'}
+            </span>
+          </div>
+        )}
+
+        {/* Carousel Navigation Arrows & Dots when multiple images are present */}
+        {hasMultipleImages && (
+          <>
+            {/* Left arrow */}
+            <button
+              type="button"
+              onClick={handlePrevImage}
+              aria-label="Previous image"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-opacity duration-200 opacity-90 hover:opacity-100 shadow-sm"
+            >
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+            </button>
+
+            {/* Right arrow */}
+            <button
+              type="button"
+              onClick={handleNextImage}
+              aria-label="Next image"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-opacity duration-200 opacity-90 hover:opacity-100 shadow-sm"
+            >
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+            </button>
+
+            {/* 5 indicator dots */}
+            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-xs">
+              {cardImages.map((_, dotIdx) => (
+                <button
+                  key={dotIdx}
+                  type="button"
+                  onClick={(e) => handleSelectDot(e, dotIdx)}
+                  aria-label={`Go to slide ${dotIdx + 1}`}
+                  className={`transition-all duration-300 rounded-full ${
+                    activeImgIndex === dotIdx
+                      ? 'w-4 h-1.5 bg-white'
+                      : 'w-1.5 h-1.5 bg-white/60 hover:bg-white/90'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Top-Left: Status Badge only for ongoing projects */}
         {(isInDevelopment || isComingSoon) && (
@@ -90,7 +201,7 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
             </h3>
 
             {/* Compact direct link/open action */}
-            {project.demoUrl ? (
+            {!isApplication && project.demoUrl ? (
               <a
                 href={project.demoUrl}
                 target="_blank"
@@ -118,9 +229,9 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
             {project.description}
           </p>
 
-          {/* Redesigned Technology Stack Badges with Official Logos */}
-          <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-6">
-            {project.tags.slice(0, compact ? 2 : 4).map((tag, idx) => (
+          {/* Technology Stack Badges with Official Logos */}
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-3 sm:mb-5">
+            {(project.tags || project.technologies || project.stack || []).map((tag, idx) => (
               <TechBadge key={idx} name={tag} />
             ))}
           </div>
@@ -138,26 +249,28 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
             <span>Details</span>
           </button>
 
-          {/* Blue Live Demo Button */}
-          {project.demoUrl ? (
-            <a
-              href={project.demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[#0b5cff] hover:bg-[#004cd8] text-white text-[11px] sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(11,92,255,0.35)] transition-all cursor-pointer"
-            >
-              <span>Live Demo</span>
-              <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            </a>
-          ) : (
-            <button
-              type="button"
-              onClick={() => onSelect && onSelect(project)}
-              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-blue-50 text-[#0b5cff] hover:bg-blue-100 text-[11px] sm:text-[13px] font-semibold transition-colors cursor-pointer"
-            >
-              <span>Preview</span>
-              <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            </button>
+          {/* Action Button: hidden if Application, otherwise Blue Live Demo or Preview Button */}
+          {!isApplication && (
+            project.demoUrl ? (
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[#0b5cff] hover:bg-[#004cd8] text-white text-[11px] sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(11,92,255,0.35)] transition-all cursor-pointer"
+              >
+                <span>Live Demo</span>
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onSelect && onSelect(project)}
+                className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-blue-50 text-[#0b5cff] hover:bg-blue-100 text-[11px] sm:text-[13px] font-semibold transition-colors cursor-pointer"
+              >
+                <span>Preview</span>
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              </button>
+            )
           )}
         </div>
       </div>
@@ -167,7 +280,9 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
 
 export default memo(ProjectCard, (prevProps, nextProps) => {
   return (
-    prevProps.project.id === nextProps.project.id &&
+    prevProps.project?.id === nextProps.project?.id &&
+    prevProps.project?.image === nextProps.project?.image &&
+    prevProps.project?.images?.length === nextProps.project?.images?.length &&
     prevProps.isRevealed === nextProps.isRevealed &&
     prevProps.index === nextProps.index &&
     prevProps.compact === nextProps.compact
