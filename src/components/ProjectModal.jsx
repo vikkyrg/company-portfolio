@@ -308,9 +308,11 @@ export default function ProjectModal({ project, projectsList = [], onSelectProje
                   <span className="font-mono text-xs uppercase tracking-wider text-[#0b5cff] font-bold">
                     {project.categoryLabel || 'Projects in Development'}
                   </span>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0b5cff] font-medium border border-blue-200">
-                    Status: {project.status || 'In Development'}
-                  </span>
+                  {project.status && (
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0b5cff] font-medium border border-blue-200">
+                      Status: {project.status}
+                    </span>
+                  )}
                   {project.projectType && (
                     <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200">
                       {project.projectType}

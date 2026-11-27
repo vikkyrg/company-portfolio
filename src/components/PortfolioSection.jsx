@@ -6,8 +6,39 @@ import { Layers, Globe, Code2 } from 'lucide-react';
 
 const ProjectModal = lazy(() => import('./ProjectModal'));
 
+// Map URL query param 'tab' to category id and vice-versa
+// Supports: websites, applications, custom-software, and development (alias for in-development)
+const TAB_PARAM_MAP = {
+  'websites': 'websites',
+  'applications': 'applications',
+  'custom-software': 'custom-software',
+  'development': 'in-development',
+  'in-development': 'in-development'
+};
+
+const ID_TO_PARAM_MAP = {
+  'websites': 'websites',
+  'applications': 'applications',
+  'custom-software': 'custom-software',
+  'in-development': 'development'
+};
+
+const getCategoryFromUrl = () => {
+  if (typeof window === 'undefined') return 'websites';
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    if (tabParam && TAB_PARAM_MAP[tabParam.toLowerCase()]) {
+      return TAB_PARAM_MAP[tabParam.toLowerCase()];
+    }
+  } catch (e) {
+    // ignore
+  }
+  return 'websites';
+};
+
 export default function PortfolioSection() {
-  const [activeTab, setActiveTab] = useState('websites');
+  const [activeTab, setActiveTab] = useState(() => getCategoryFromUrl());
   const [selectedProject, setSelectedProject] = useState(null);
   const [isGridInView, setIsGridInView] = useState(false);
   const [isHeaderInView, setIsHeaderInView] = useState(false);
@@ -15,12 +46,34 @@ export default function PortfolioSection() {
   const desktopGridRef = useRef(null);
   const headerRef = useRef(null);
 
-  // Trigger sequential staggered reveal animation when either mobile or desktop cards enter viewport
+  // Disable browser automatic scroll restoration and scroll to top on initial page load / refresh
   useEffect(() => {
-    // Immediate fallback: ensure cards are visible without waiting for observer
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
+    // Instantly reset scroll to top on page load/refresh
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
+  // Listen for browser forward/back buttons (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const categoryFromUrl = getCategoryFromUrl();
+      setActiveTab(categoryFromUrl);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Ensure cards are visible immediately
+  useEffect(() => {
     const fallbackTimer = setTimeout(() => {
       setIsGridInView(true);
-    }, 150);
+    }, 100);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -66,9 +119,18 @@ export default function PortfolioSection() {
     return () => observer.disconnect();
   }, []);
 
-  // Immediate Category Switching Handler (no delays or artificial timeouts)
+  // Immediate Category Switching Handler with URL Query Push
   const handleTabChange = useCallback((newTab) => {
     setActiveTab(newTab);
+
+    try {
+      const url = new URL(window.location.href);
+      const tabParamValue = ID_TO_PARAM_MAP[newTab] || newTab;
+      url.searchParams.set('tab', tabParamValue);
+      window.history.pushState({ tab: newTab }, '', url.toString());
+    } catch (e) {
+      // ignore
+    }
   }, []);
 
   const handleSelectProject = useCallback((project) => {

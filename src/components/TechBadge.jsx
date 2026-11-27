@@ -230,6 +230,17 @@ export function TechIcon({ name }) {
     );
   }
 
+  // Dart
+  if (lower.includes('dart')) {
+    return (
+      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
+        <path d="M4.1 4.1h7.8L20 12.2l-4.1 7.7-7.8-4.1L4.1 4.1z" fill="#0175C2" />
+        <path d="M11.9 4.1L4.1 11.9l3.8 3.9 7.8-7.8-3.8-3.9z" fill="#00B4AB" />
+        <path d="M8.1 19.9l3.8-3.9 4 3.9H8.1z" fill="#02569B" />
+      </svg>
+    );
+  }
+
   // Python
   if (lower.includes('python')) {
     return (
