@@ -86,11 +86,11 @@ import sadhanaAdmin4 from '../assets/custome/sadhana cart/4.png';
 import sadhanaAdmin5 from '../assets/custome/sadhana cart/5.png';
 
 // Custom Software - Dump & Drop Ride & Logistics Management Admin Panel (5 PNG images)
-import dumpDrop1 from '../assets/custome/dump and drop/1.png';
-import dumpDrop2 from '../assets/custome/dump and drop/2.png';
-import dumpDrop3 from '../assets/custome/dump and drop/3.png';
-import dumpDrop4 from '../assets/custome/dump and drop/4.png';
-import dumpDrop5 from '../assets/custome/dump and drop/5.png';
+import dumpDropAdmin1 from '../assets/custome/dump and drop/1.png';
+import dumpDropAdmin2 from '../assets/custome/dump and drop/2.png';
+import dumpDropAdmin3 from '../assets/custome/dump and drop/3.png';
+import dumpDropAdmin4 from '../assets/custome/dump and drop/4.png';
+import dumpDropAdmin5 from '../assets/custome/dump and drop/5.png';
 
 // Custom Software - Familiess Matrimony Admin Management Platform (5 PNG images)
 import matrimony1 from '../assets/custome/matrimony/1.png';
@@ -153,6 +153,28 @@ import zudoDelivery2 from '../assets/app/zudo delivery/2.png';
 import zudoDelivery3 from '../assets/app/zudo delivery/3.png';
 import zudoDelivery4 from '../assets/app/zudo delivery/4.png';
 import zudoDelivery5 from '../assets/app/zudo delivery/5.png';
+
+// 8. Dump & Drop – Transport & Logistics App (src/assets/app/dump and drop/)
+import dumpDrop1 from '../assets/app/dump and drop/1.png';
+import dumpDrop2 from '../assets/app/dump and drop/2.png';
+import dumpDrop3 from '../assets/app/dump and drop/3.png';
+import dumpDrop4 from '../assets/app/dump and drop/4.png';
+import dumpDrop5 from '../assets/app/dump and drop/5.png';
+import dumpDrop6 from '../assets/app/dump and drop/6.png';
+
+// 9. KEYNH – Online Classifieds & Marketplace App (src/assets/app/olx/)
+import keynh1 from '../assets/app/olx/1.png';
+import keynh2 from '../assets/app/olx/2.png';
+import keynh3 from '../assets/app/olx/3.png';
+import keynh4 from '../assets/app/olx/4.png';
+import keynh5 from '../assets/app/olx/5.png';
+
+// 10. Familiess – Matrimony & Matchmaking App (src/assets/app/matrimony/)
+import familiessApp1 from '../assets/app/matrimony/1.png';
+import familiessApp2 from '../assets/app/matrimony/2.png';
+import familiessApp3 from '../assets/app/matrimony/3.png';
+import familiessApp4 from '../assets/app/matrimony/4.png';
+import familiessApp5 from '../assets/app/matrimony/5.png';
 
 // 9 In Development Projects Images
 // 1. E-Commerce Platform (Importing existing 1.png - 5.png from src/assets/dev/ecommerce/)
@@ -611,6 +633,260 @@ export const allProjects = [
       backend: ['Node.js', 'Express.js', 'REST API'],
       database: ['MongoDB', 'Mongoose ODM'],
       flow: 'Delivery Partner / Associate Mobile App (Flutter) → Express.js REST API → Dispatch & Logistics Services → MongoDB Database.'
+    }
+  },
+
+  // Project 8: Dump & Drop – Transport & Logistics App
+  {
+    id: 'dump-and-drop-logistics',
+    category: 'applications',
+    categoryLabel: 'Applications',
+    title: 'Dump & Drop – Transport & Logistics App',
+    shortName: 'Dump & Drop',
+    projectType: 'Mobile Application',
+    description:
+      'A transport and logistics mobile application designed to connect drivers and customers for goods transportation and delivery services. The platform provides separate driver and customer entry points, helping drivers earn money through transport services while allowing customers to arrange transportation for heavy goods and other delivery requirements.',
+    shortDescription:
+      'A transport and logistics mobile application designed to connect drivers and customers for goods transportation and delivery services. The platform provides separate driver and customer entry points, helping drivers earn money through transport services while allowing customers to arrange transportation for heavy goods and other delivery requirements.',
+    image: dumpDrop1,
+    images: [
+      {
+        src: dumpDrop1,
+        alt: 'Dump & Drop Transport & Logistics App Welcome & Role Selection',
+        label: 'Welcome & Role Selection'
+      },
+      {
+        src: dumpDrop2,
+        alt: 'Dump & Drop Driver & Customer Onboarding Interface',
+        label: 'Driver & Customer Onboarding'
+      },
+      {
+        src: dumpDrop3,
+        alt: 'Dump & Drop Transport Booking & Logistics Overview',
+        label: 'Goods Transport Workflow'
+      },
+      {
+        src: dumpDrop4,
+        alt: 'Dump & Drop Delivery Service Coordination',
+        label: 'Delivery Coordination'
+      },
+      {
+        src: dumpDrop5,
+        alt: 'Dump & Drop Fleet & Driver Dashboard',
+        label: 'Driver Dashboard'
+      },
+      {
+        src: dumpDrop6,
+        alt: 'Dump & Drop Customer Order & Transport Tracking',
+        label: 'Transport Management'
+      }
+    ],
+    tags: [
+      'Flutter',
+      'Dart',
+      'REST API',
+      'Node.js',
+      'Express.js',
+      'MongoDB'
+    ],
+    stack: [
+      'Flutter',
+      'Dart',
+      'REST API',
+      'Node.js',
+      'Express.js',
+      'MongoDB'
+    ],
+    technologies: [
+      'Flutter',
+      'Dart',
+      'REST API',
+      'Node.js',
+      'Express.js',
+      'MongoDB'
+    ],
+    status: null,
+    statusType: null,
+    url: null,
+    demoUrl: null,
+    features: [
+      'Dual User Access – Separate entry points for Drivers and Customers within a unified transport platform.',
+      'Driver Registration & Access – Allows transport drivers to access the platform and participate in delivery services.',
+      'Customer Access – Provides customers with a dedicated interface to arrange transportation for their goods.',
+      'Goods Transportation – Supports transportation requests for packages, household items, and heavy goods.',
+      'Driver & Customer Workflows – Provides separate user experiences based on the selected role.',
+      'Transport Request Management – Supports the workflow for connecting customer transportation requirements with drivers.',
+      'Goods Delivery Coordination – Designed to support communication and coordination between drivers and customers.',
+      'Mobile-First Interface – Simple onboarding experience with clear role selection and easy navigation.'
+    ],
+    architecture: {
+      frontend: ['Flutter', 'Dart', 'Mobile UI'],
+      backend: ['Node.js', 'Express.js', 'REST API'],
+      database: ['MongoDB', 'Mongoose ODM'],
+      flow: 'Customer / Driver App (Flutter) → Express.js REST API → Logistics Services → MongoDB Database.'
+    }
+  },
+
+  // Project 9: KEYNH – Online Classifieds & Marketplace App
+  {
+    id: 'keynh-classifieds-marketplace',
+    category: 'applications',
+    categoryLabel: 'Applications',
+    title: 'KEYNH – Online Classifieds & Marketplace App',
+    shortName: 'KEYNH',
+    projectType: 'Mobile Application',
+    description:
+      'A mobile-first online classifieds and marketplace application designed to connect buyers and sellers across multiple product and service categories. Users can explore properties, electronics, mobile phones, vehicles, jobs, furniture, fashion, and services, search for listings, discover sponsored promotions, and manage their selling and buying activities through a simple interface.',
+    shortDescription:
+      'A mobile-first online classifieds and marketplace application designed to connect buyers and sellers across multiple product and service categories. Users can explore properties, electronics, mobile phones, vehicles, jobs, furniture, fashion, and services, search for listings, discover sponsored promotions, and manage their selling and buying activities through a simple interface.',
+    image: keynh1,
+    images: [
+      {
+        src: keynh1,
+        alt: 'KEYNH Online Classifieds Home & Multi-Category Marketplace',
+        label: 'Marketplace Home & Categories'
+      },
+      {
+        src: keynh2,
+        alt: 'KEYNH Location-Based Discovery & Search',
+        label: 'Search & Location Discovery'
+      },
+      {
+        src: keynh3,
+        alt: 'KEYNH Classified Listings & Promotional Banners',
+        label: 'Featured Listings & Ads'
+      },
+      {
+        src: keynh4,
+        alt: 'KEYNH Selling Workflow & Listing Management',
+        label: 'Post Ad & Listing Management'
+      },
+      {
+        src: keynh5,
+        alt: 'KEYNH User Account, 7-Day Buyer & Favorites',
+        label: 'Account & Buyer Profile'
+      }
+    ],
+    tags: [
+      'Flutter',
+      'Dart',
+      'Firebase'
+    ],
+    stack: [
+      'Flutter',
+      'Dart',
+      'Firebase'
+    ],
+    technologies: [
+      'Flutter',
+      'Dart',
+      'Firebase'
+    ],
+    status: null,
+    statusType: null,
+    url: null,
+    demoUrl: null,
+    features: [
+      'Multi-Category Marketplace – Browse properties, electronics, mobiles, vehicles, jobs, furniture, fashion, and services.',
+      'Location-Based Discovery – Select or detect location to discover relevant nearby listings.',
+      'Global Search – Search cars, mobiles, jobs, and other marketplace listings from a unified search interface.',
+      'Sponsored Advertisements – Display sponsored listings and promotional content.',
+      '7-Day Buyer Access – Display the 7-Day Buyer membership indicator shown in the application.',
+      'Listing Management – Provide a dedicated selling workflow to manage user advertisements and listings.',
+      'Buyer-Seller Interaction – Support communication and interaction between buyers and sellers.',
+      'User Account & Favorites – Provide profile management, saved favorites, and user-specific marketplace navigation.'
+    ],
+    architecture: {
+      frontend: ['Flutter', 'Dart', 'Mobile UI'],
+      backend: ['Firebase Services', 'Cloud Functions', 'Auth'],
+      database: ['Firestore Database', 'Firebase Storage'],
+      flow: 'Buyer / Seller Mobile App (Flutter) → Firebase Services / Cloud Firestore → Mobile UI.'
+    }
+  },
+
+  // Project 10: Familiess – Matrimony & Matchmaking App
+  {
+    id: 'familiess-matrimony-app',
+    category: 'applications',
+    categoryLabel: 'Applications',
+    title: 'Familiess – Matrimony & Matchmaking App',
+    shortName: 'Familiess',
+    projectType: 'Mobile Application',
+    description:
+      'A modern matrimony and matchmaking mobile application designed to help individuals discover compatible life partners. Users can explore profiles, apply filters, search for matches, express interest, communicate with other members, and access premium membership features through a simple and user-friendly interface.',
+    shortDescription:
+      'A modern matrimony and matchmaking mobile application designed to help individuals discover compatible life partners. Users can explore profiles, apply filters, search for matches, express interest, communicate with other members, and access premium membership features through a simple and user-friendly interface.',
+    image: familiessApp1,
+    images: [
+      {
+        src: familiessApp1,
+        alt: 'Familiess Matrimony Match Discovery & Profile Browsing',
+        label: 'Match Discovery'
+      },
+      {
+        src: familiessApp2,
+        alt: 'Familiess Matrimony Search & Advanced Profile Filters',
+        label: 'Search & Filters'
+      },
+      {
+        src: familiessApp3,
+        alt: 'Familiess Matrimony Interest Management & Connections',
+        label: 'Interest Management'
+      },
+      {
+        src: familiessApp4,
+        alt: 'Familiess Matrimony Real-Time Chat & Messaging',
+        label: 'Chat & Communication'
+      },
+      {
+        src: familiessApp5,
+        alt: 'Familiess Matrimony User Profile & Premium Membership',
+        label: 'Profile & Membership'
+      }
+    ],
+    tags: [
+      'Flutter',
+      'Dart',
+      'REST API',
+      'Node.js',
+      'Express.js',
+      'MongoDB'
+    ],
+    stack: [
+      'Flutter',
+      'Dart',
+      'REST API',
+      'Node.js',
+      'Express.js',
+      'MongoDB'
+    ],
+    technologies: [
+      'Flutter',
+      'Dart',
+      'REST API',
+      'Node.js',
+      'Express.js',
+      'MongoDB'
+    ],
+    status: null,
+    statusType: null,
+    url: null,
+    demoUrl: null,
+    features: [
+      'User Profile Management – Manage personal information and matrimonial profiles.',
+      'Match Discovery – Discover potential life partners through profile browsing.',
+      'Advanced Profile Filters – Filter profiles based on relevant preferences.',
+      'Search Functionality – Search and explore suitable matrimonial profiles.',
+      'Interest Management – Send interest requests to other members.',
+      'Real-Time Chat – Communication between members to support matchmaking.',
+      'Premium Membership – Provide premium membership options and additional features.',
+      'Profile Gallery – View profile photographs and additional images.'
+    ],
+    architecture: {
+      frontend: ['Flutter', 'Dart', 'Mobile UI'],
+      backend: ['Node.js', 'Express.js', 'REST API'],
+      database: ['MongoDB', 'Mongoose ODM'],
+      flow: 'Matrimony Mobile App (Flutter) → Express.js REST API → Matchmaking & Chat Services → MongoDB Database.'
     }
   },
 
@@ -1603,30 +1879,30 @@ export const allProjects = [
       'A comprehensive ride-hailing and logistics administration platform designed to manage cab rides, goods delivery, vehicle rentals, bookings, drivers, customers, commissions, and revenue analytics. The centralized dashboard provides operational insights, booking monitoring, financial reports, and driver management through an intuitive administrative interface.',
     description:
       'A centralized administration system for managing transportation and delivery operations. It allows administrators to monitor cab rides, goods delivery, vehicle rentals, bookings, drivers, financial transactions, and platform performance from one dashboard.',
-    image: dumpDrop1,
+    image: dumpDropAdmin1,
     images: [
       {
-        src: dumpDrop1,
+        src: dumpDropAdmin1,
         alt: 'Dump & Drop Operations and Analytics Dashboard',
         label: 'Dashboard & Analytics'
       },
       {
-        src: dumpDrop2,
+        src: dumpDropAdmin2,
         alt: 'Dump & Drop Cab Ride and Bookings Management',
         label: 'Cab Rides & Bookings'
       },
       {
-        src: dumpDrop3,
+        src: dumpDropAdmin3,
         alt: 'Dump & Drop Goods Delivery and Logistics Tracking',
         label: 'Goods Delivery'
       },
       {
-        src: dumpDrop4,
+        src: dumpDropAdmin4,
         alt: 'Dump & Drop Driver Directory and Verification',
         label: 'Drivers & Users'
       },
       {
-        src: dumpDrop5,
+        src: dumpDropAdmin5,
         alt: 'Dump & Drop Revenue Analytics and Commission Settings',
         label: 'Commission & Revenue'
       }

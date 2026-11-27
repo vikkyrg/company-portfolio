@@ -45,6 +45,27 @@ export default function PortfolioSection() {
   const mobileGridRef = useRef(null);
   const desktopGridRef = useRef(null);
   const headerRef = useRef(null);
+  const sectionRef = useRef(null);
+  const isFirstRender = useRef(true);
+
+  // Helper to scroll smoothly/instantly to the top of the portfolio content
+  const scrollToPortfolioTop = useCallback(() => {
+    // Reset window/document scroll
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+
+    // Reset any internal scroll positions on grids or section if present
+    if (sectionRef.current) {
+      sectionRef.current.scrollTop = 0;
+    }
+    if (mobileGridRef.current) {
+      mobileGridRef.current.scrollTop = 0;
+    }
+    if (desktopGridRef.current) {
+      desktopGridRef.current.scrollTop = 0;
+    }
+  }, []);
 
   // Disable browser automatic scroll restoration and scroll to top on initial page load / refresh
   useEffect(() => {
@@ -53,10 +74,18 @@ export default function PortfolioSection() {
     }
 
     // Instantly reset scroll to top on page load/refresh
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
+    scrollToPortfolioTop();
+  }, [scrollToPortfolioTop]);
+
+  // When activeTab changes (after initial render), reset scroll container to the top
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    scrollToPortfolioTop();
+  }, [activeTab, scrollToPortfolioTop]);
 
   // Listen for browser forward/back buttons (popstate)
   useEffect(() => {
@@ -157,6 +186,7 @@ export default function PortfolioSection() {
 
   return (
     <section
+      ref={sectionRef}
       id="portfolio"
       className="relative w-full min-h-screen pt-4 sm:pt-6 pb-16 sm:pb-24 sm:overflow-hidden bg-gradient-to-b from-[#F8FBFF] via-[#EAF3FF] to-[#DCEBFF] animate-bg-gradient"
     >
