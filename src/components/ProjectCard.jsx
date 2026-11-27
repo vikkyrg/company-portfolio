@@ -6,6 +6,7 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
   const isInDevelopment = project.statusType === 'in-development';
   const isComingSoon = project.statusType === 'coming-soon';
   const isApplication = project.category === 'applications';
+  const isWebsite = project.category === 'websites';
 
   // Normalize image list for projects with multiple screenshots (e.g., Chan Constructions)
   const cardImages = Array.isArray(project.images) && project.images.length > 0
@@ -207,7 +208,7 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                aria-label={`Open ${project.title} live demo`}
+                aria-label={isWebsite ? `Visit ${project.title}` : `Open ${project.title} live demo`}
                 className="w-7 h-7 shrink-0 rounded-lg bg-blue-50/80 hover:bg-[#0b5cff] text-[#0b5cff] hover:text-white flex items-center justify-center transition-colors shadow-xs"
               >
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -249,7 +250,7 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
             <span>Details</span>
           </button>
 
-          {/* Action Button: hidden if Application, otherwise Blue Live Demo or Preview Button */}
+          {/* Action Button: hidden if Application, otherwise Blue Visit Site / Live Demo or Preview Button */}
           {!isApplication && (
             project.demoUrl ? (
               <a
@@ -258,7 +259,7 @@ function ProjectCard({ project, onSelect, index = 0, isRevealed = true, compact 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[#0b5cff] hover:bg-[#004cd8] text-white text-[11px] sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(11,92,255,0.35)] transition-all cursor-pointer"
               >
-                <span>Live Demo</span>
+                <span>{isWebsite ? 'Visit Site' : 'Live Demo'}</span>
                 <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </a>
             ) : (

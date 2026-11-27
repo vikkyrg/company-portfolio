@@ -363,7 +363,7 @@ export default function PortfolioSection() {
         {/* Header Section: "Our Portfolio" and subtitle with deep navy typography */}
         <div
           ref={headerRef}
-          className={`text-center max-w-2xl mx-auto mb-10 sm:mb-12 scroll-reveal-init ${
+          className={`text-center max-w-2xl mx-auto mb-6 sm:mb-12 scroll-reveal-init ${
             isHeaderInView ? 'scroll-reveal-visible' : ''
           }`}
         >
@@ -410,11 +410,14 @@ export default function PortfolioSection() {
           ========================================================================
         */}
         <div className="flex sm:hidden items-start justify-center gap-2 xs:gap-3 sm:gap-3.5 mb-10 w-full max-w-[620px] mx-auto">
-          {/* Compact Vertical Tab Navigation Sidebar - Sticky & vertically centered in viewport */}
+          {/* Compact Vertical Tab Navigation Sidebar - Sticky & vertically aligned with project cards */}
           <div
             role="tablist"
             aria-label="Portfolio Categories Vertical Navigation"
-            className="sticky top-1/2 -translate-y-1/2 z-30 shrink-0 flex flex-col gap-1.5 xs:gap-2 p-1 xs:p-1.5 bg-white/95 backdrop-blur-md rounded-2xl border border-blue-100/80 shadow-[0_4px_20px_rgba(37,99,235,0.08),0_1px_3px_rgba(0,0,0,0.02)]"
+            className="sticky top-20 sm:top-24 z-30 shrink-0 flex flex-col gap-1.5 xs:gap-2 p-1 xs:p-1.5 bg-white/95 backdrop-blur-md rounded-2xl border border-blue-100/80 shadow-[0_4px_20px_rgba(37,99,235,0.08),0_1px_3px_rgba(0,0,0,0.02)] transition-all"
+            style={{
+              top: 'calc(4.75rem + env(safe-area-inset-top, 0px))'
+            }}
           >
             {filterCategories.map((cat) => {
               const isActive = activeTab === cat.id;
@@ -426,11 +429,10 @@ export default function PortfolioSection() {
                   aria-label={cat.label}
                   type="button"
                   onClick={() => handleTabChange(cat.id)}
-                  className={`w-10 h-10 xs:w-11 xs:h-11 rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-[#0b5cff] ${
-                    isActive
-                      ? 'bg-[#0b5cff] text-white shadow-[0_4px_14px_rgba(11,92,255,0.38)]'
-                      : 'bg-white text-slate-600 hover:text-[#0b5cff] hover:bg-blue-50/80 shadow-xs'
-                  }`}
+                  className={`w-10 h-10 xs:w-11 xs:h-11 rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-[#0b5cff] ${isActive
+                    ? 'bg-[#0b5cff] text-white shadow-[0_4px_14px_rgba(11,92,255,0.38)]'
+                    : 'bg-white text-slate-600 hover:text-[#0b5cff] hover:bg-blue-50/80 shadow-xs'
+                    }`}
                 >
                   {getCategoryIcon(cat.id, "w-4 h-4 xs:w-5 xs:h-5 shrink-0 stroke-[2.2]")}
                 </button>

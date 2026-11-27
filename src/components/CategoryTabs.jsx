@@ -66,7 +66,7 @@ export default function CategoryTabs({ categories, activeTab, onSelectTab, count
   }, [activeTab]);
 
   return (
-    <div className="w-full flex flex-col items-center mb-6 sm:mb-14 px-2 sm:px-4">
+    <div className="w-full flex flex-col items-center mt-3 sm:mt-0 mb-8 sm:mb-14 px-2 sm:px-4">
       {/* 
         ========================================================================
         HORIZONTAL TAB NAVIGATION

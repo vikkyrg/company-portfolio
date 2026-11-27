@@ -118,6 +118,7 @@ export default function ProjectModal({ project, projectsList = [], onSelectProje
   const isInDevelopment = project.statusType === 'in-development';
   const isComingSoon = project.statusType === 'coming-soon';
   const isApplication = project.category === 'applications';
+  const isWebsite = project.category === 'websites';
   const stackItems = project.stack || project.tags || project.technologies || [];
 
   return (
@@ -389,7 +390,7 @@ export default function ProjectModal({ project, projectsList = [], onSelectProje
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0b5cff] hover:bg-blue-700 text-white font-semibold text-sm shadow-md transition-all cursor-pointer"
                     >
-                      <span>Launch Live Demo</span>
+                      <span>{isWebsite ? 'Visit Site' : 'Launch Live Demo'}</span>
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   ) : !isApplication ? (
